@@ -1,49 +1,29 @@
-# EE471
+# EE471 – Modern Software Development Practices and Technologies
 
-Flask-based Azure Speech studio for EE471.
+Coursework for EE 471 at Izmir Institute of Technology (Fall 2026).
 
-## Features
+## Repository layout
 
-- Accepts text input from a browser form on `localhost`
-- Generates a `.wav` audio file with Azure Speech Services
-- Uploads or records `.wav` audio and transcribes it back into text
-- Plays generated audio in the page and lets you download it
-- Keeps Azure credentials in a local `.env` file
+Each week and each project lives in its own folder with its own `README.md`
+and, where needed, its own `requirements.txt`.
 
-## Setup
+| Folder | Topic | Status |
+|---|---|---|
+| [`week01-conform/`](week01-conform/) | Brain teaser: *You Will All Conform* | Done |
+| [`week05-azure-speech/`](week05-azure-speech/) | Azure AI Speech: text-to-speech and speech-to-text (Flask) | From previous term |
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env
-```
+Upcoming folders: `week02-...` through `week12-...`, `projects/project1` through
+`projects/project4`, and `final-project/`.
 
-Update `.env` with your own Azure Speech credentials:
+## Workflow
 
-```env
-AZURE_SPEECH_KEY=your_azure_speech_key
-AZURE_SPEECH_REGION=your_service_region
-AZURE_SPEECH_VOICE=tr-TR-AhmetNeural
-AZURE_SPEECH_RECOGNITION_LANGUAGE=tr-TR
-```
+- `main` always holds finished, working code.
+- Each week's work is done on its own branch (`Week1`, `Week2`, ...) and merged
+  into `main` when complete.
+- Project submissions are tagged (e.g. `project1-submission`).
+- Secrets such as Azure keys go in a local `.env` file, which is never committed.
+  Each project that needs one ships a `.env.example`.
 
-## Run The Website
+## Archive
 
-```bash
-source .venv/bin/activate
-flask --app app run --debug
-```
-
-Open `http://127.0.0.1:5000` in your browser.
-
-## What You Can Do
-
-- Text to speech: type text, choose voice, speed, and pitch, then generate a WAV file
-- Speech to text: upload a WAV file or record from your microphone, then transcribe it with Azure
-
-## Optional CLI Test
-
-```bash
-python speech_tts.py "Merhaba, Azure Speech Services hazir."
-```
+Work from the previous term is preserved in the `archive-2025-26` tag.
