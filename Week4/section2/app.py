@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, render_template, request
 from werkzeug.exceptions import HTTPException
 
 from custom_classes import DVD, Book, ItemNotFoundError, ItemStateError, LibraryCollection
@@ -54,6 +54,11 @@ def bool_query_param(name):
 
 
 # --- Routes: translate HTTP to LibraryCollection method calls.
+
+@app.get("/")
+def index():
+    return render_template("index.html")
+
 
 @app.post("/api/items")
 def create_item():

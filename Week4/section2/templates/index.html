@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="toolbar">
+    <label class="toggle">
+      <input type="checkbox" id="available-only">
+      <span class="toggle-track" aria-hidden="true"></span>
+      Available Only
+    </label>
+
+    <div class="segmented" role="group" aria-label="Filter by type">
+      <button type="button" class="segment active" data-type="">All</button>
+      <button type="button" class="segment" data-type="book">Books</button>
+      <button type="button" class="segment" data-type="dvd">DVDs</button>
+    </div>
+
+    <button type="button" class="button primary" id="add-button">+ Add Item</button>
+  </header>
+
+  <div id="error-area" class="error-area" role="alert" hidden>
+    <span id="error-message"></span>
+    <button type="button" class="error-close" id="error-close" aria-label="Dismiss">×</button>
+  </div>
+
+  <main>
+    <section id="item-list" class="item-list" aria-live="polite"></section>
+    <p id="empty-state" class="empty-state" hidden></p>
+  </main>
+
+  <dialog id="item-dialog" class="dialog">
+    <form id="item-form" method="dialog" novalidate>
+      <h2 id="dialog-title">Add New Item</h2>
+
+      <label>Title
+        <input type="text" id="field-title" autocomplete="off">
+      </label>
+
+      <label>Author / Director
+        <input type="text" id="field-author" autocomplete="off">
+      </label>
+
+      <div class="form-row">
+        <label>Media Type
+          <select id="field-type">
+            <option value="book">Book</option>
+            <option value="dvd">DVD</option>
+          </select>
+        </label>
+        <label><span id="size-label">Page Count</span>
+          <input type="number" id="field-size" min="1" step="1">
+        </label>
+      </div>
+
+      <p id="form-error" class="form-error" role="alert" hidden></p>
+
+      <div class="dialog-actions">
+        <button type="button" class="button secondary" id="cancel-button">Cancel</button>
+        <button type="submit" class="button primary">Save Item</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

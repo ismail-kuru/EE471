@@ -83,3 +83,13 @@ Example item:
 ```json
 {"id": 3, "type": "dvd", "title": "Arrival", "author": "Denis Villeneuve", "duration": 116, "is_available": false}
 ```
+
+### Part 4: Frontend
+
+Flask serves the page at <http://127.0.0.1:5001> (`templates/index.html`,
+`static/style.css`, `static/script.js`). The layout follows the example screenshot in the
+exercise. The page only calls the API: filters are sent as query parameters, and API
+error messages (for example 409 when deleting a checked-out item) appear in the error
+area at the top.
+
+Prompts and corrections: [`section2/PROMPTS.md`](section2/PROMPTS.md).
