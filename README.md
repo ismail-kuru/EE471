@@ -10,6 +10,7 @@ and, where needed, its own `requirements.txt`.
 | Folder | Topic | Status |
 |---|---|---|
 | [`week01-conform/`](week01-conform/) | Brain teaser: *You Will All Conform* | Done |
+| [`Week4/`](Week4/) | Flask web apps: calculator (Section 1) and library REST API with a frontend (Section 2) | Done |
 | [`week05-azure-speech/`](week05-azure-speech/) | Azure AI Speech: text-to-speech and speech-to-text (Flask) | From previous term |
 
 Upcoming folders: `week02-...` through `week12-...`, `projects/project1` through

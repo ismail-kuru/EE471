@@ -1,0 +1,75 @@
+/* Colors and sizes are measured from design/calculator.png (Figma export). */
+:root {
+  --frame: #0072ce;
+  --display-bg: #ffffff;
+  --digit: #7f7f7f;
+  --operator: #a6a6a6;
+  --equals: #00509e;
+  --key-text: #ffffff;
+  --key-gap: 12px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #f2f2f2;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.calculator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  width: 329px;
+  box-sizing: border-box;
+  padding: 15px 31px 17px;
+  background: var(--frame);
+  border-radius: 13px;
+}
+
+.display {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 83px;
+  padding: 0 24px;
+  line-height: 83px;
+  background: var(--display-bg);
+  border-radius: 30px;
+  font-size: 36px;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.display.error {
+  color: #c62828;
+  font-size: 16px;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(4, 55px);
+  grid-auto-rows: 49px;
+  gap: var(--key-gap);
+}
+
+.key {
+  border: none;
+  border-radius: 50%;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--key-text);
+  background: var(--digit);
+  cursor: pointer;
+}
+
+.key.operator { background: var(--operator); }
+.key.equals { background: var(--equals); }
+.key:hover { filter: brightness(1.1); }
+.key:active { filter: brightness(0.9); }
