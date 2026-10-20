@@ -42,3 +42,44 @@ curl -X POST http://127.0.0.1:5001/api/calculate \
 ```
 
 Prompts and corrections: [`section1/PROMPTS.md`](section1/PROMPTS.md).
+
+## Section 2: Library App
+
+Starting point: `custom_classes.py` and `main.py` from the merged Week 3 `main` branch.
+Code is in [`section2/`](section2/).
+
+### Part 2: CRUD methods
+
+`custom_classes.py` adds `ItemNotFoundError` and `ItemStateError`, unique ids that are
+never reused, `to_dict()`, and `get_item`, `list_items`, `update_item` and `remove_item`
+on `LibraryCollection`. Run `python3 main.py` inside `section2/` to see every method
+and every exception.
+
+### Part 3: Flask REST API
+
+```bash
+cd Week4/section2
+../.venv/bin/pip install -r requirements.txt
+../.venv/bin/python app.py      # http://127.0.0.1:5001
+```
+
+| Endpoint | Purpose | Success | Errors |
+|---|---|---|---|
+| `POST /api/items` | Create a book or DVD | 201 + item | 400 |
+| `GET /api/items` | List items, `?available=true`, `?type=book` | 200 | 400 bad filter |
+| `GET /api/items/<id>` | Get one item | 200 | 404 |
+| `PUT /api/items/<id>` | Replace all editable fields | 200 | 400, 404 |
+| `PATCH /api/items/<id>` | Change some editable fields | 200 | 400, 404 |
+| `DELETE /api/items/<id>` | Remove an item | 204 | 404, 409 if checked out |
+| `POST /api/items/<id>/checkout` | Check an item out | 200 | 404, 409 already out |
+| `POST /api/items/<id>/return` | Return an item | 200 | 404, 409 not checked out |
+
+Every response is JSON; errors look like `{"error": "<message>"}`. `app.py` only
+translates HTTP to `LibraryCollection` calls and maps exceptions to status codes
+(`ValueError` → 400, `ItemNotFoundError` → 404, `ItemStateError` → 409).
+
+Example item:
+
+```json
+{"id": 3, "type": "dvd", "title": "Arrival", "author": "Denis Villeneuve", "duration": 116, "is_available": false}
+```

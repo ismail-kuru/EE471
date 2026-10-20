@@ -199,6 +199,27 @@ class LibraryCollection:
         self.items.append(item)
         return item.id
 
+    def create_item(self, item_type, **fields):
+        """Create a Book or DVD from its fields, add it and return it.
+
+        Args:
+            item_type: "book" or "dvd".
+            fields: Exactly the editable fields of that type,
+                e.g. title, author and page_count for a book.
+
+        Raises:
+            ValueError: If the type is unknown, a field is missing, extra or
+                protected, or a value is invalid.
+        """
+        creatable = {cls.TYPE: cls for cls in (Book, DVD)}
+        if item_type not in creatable:
+            raise ValueError(f"type must be one of: {', '.join(creatable)}.")
+        item_class = creatable[item_type]
+        self._check_exact_fields(item_class, fields)
+        item = item_class(**fields)
+        self.add_item(item)
+        return item
+
     def get_item(self, item_id):
         """Return the item with item_id.
 
@@ -243,6 +264,8 @@ class LibraryCollection:
                 or has an invalid value.
         """
         item = self.get_item(item_id)
+        if not fields:
+            raise ValueError("No fields to update.")
         checked = {}
         for name, value in fields.items():
             if name in self.PROTECTED_FIELDS:
@@ -256,6 +279,32 @@ class LibraryCollection:
         for name, value in checked.items():
             setattr(item, name, value)
         return item
+
+    def replace_item(self, item_id, **fields):
+        """Replace all editable fields of an item at once and return the item.
+
+        Unlike update_item(), every editable field of the item's type must be given.
+
+        Raises:
+            ItemNotFoundError: If no item has that id.
+            ValueError: If a field is missing, extra or protected, or a value is invalid.
+        """
+        item = self.get_item(item_id)
+        self._check_exact_fields(type(item), fields)
+        return self.update_item(item_id, **fields)
+
+    def _check_exact_fields(self, item_class, fields):
+        """Raise ValueError unless fields are exactly item_class's editable fields."""
+        protected = [name for name in fields if name in self.PROTECTED_FIELDS]
+        if protected:
+            raise ValueError(f"'{protected[0]}' cannot be set.")
+        expected = set(item_class.EDITABLE_FIELDS)
+        missing = [name for name in item_class.EDITABLE_FIELDS if name not in fields]
+        extra = sorted(set(fields) - expected)
+        if missing:
+            raise ValueError(f"Missing field(s) for a {item_class.TYPE}: {', '.join(missing)}.")
+        if extra:
+            raise ValueError(f"Unknown field(s) for a {item_class.TYPE}: {', '.join(extra)}.")
 
     def remove_item(self, item_id):
         """Remove the item with item_id from the collection.
