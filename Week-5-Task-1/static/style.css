@@ -24,7 +24,7 @@ body {
 }
 
 .card {
-  width: min(560px, 100%);
+  width: min(680px, 100%);
   padding: 28px;
   background: #fff;
   border-radius: 14px;
@@ -38,7 +38,7 @@ h1 { margin: 0; text-align: center; font-size: 26px; }
 
 .tabs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   margin-bottom: 8px;
   border-bottom: 1px solid var(--border);
 }
@@ -124,7 +124,7 @@ input[type="file"] { padding: 8px; }
 
 /* --- Results --- */
 
-#stt-preview { width: 100%; margin-top: 12px; }
+.preview { width: 100%; margin-top: 12px; }
 
 .result {
   margin-top: 16px;
@@ -145,3 +145,78 @@ input[type="file"] { padding: 8px; }
   background: #fff;
   white-space: pre-wrap;
 }
+
+/* --- Part 4: shared bits --- */
+
+.hint { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.result h2 + p { margin-top: 0; }
+.result h2:not(:first-child) { margin-top: 12px; }
+
+/* --- Diarization: one line per phrase, one color per speaker --- */
+
+.speaker-lines {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.speaker-lines li {
+  padding: 8px 12px;
+  border-left: 4px solid var(--speaker-color, var(--purple));
+  border-radius: 6px;
+  background: #f7f7fb;
+}
+
+.speaker-lines .speaker {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--speaker-color, var(--purple));
+}
+
+/* --- Pronunciation: score tiles and colored words --- */
+
+.scores {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.score {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  text-align: center;
+}
+
+.score strong { display: block; font-size: 22px; }
+.score span { font-size: 12px; color: var(--muted); text-transform: capitalize; }
+
+.words { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 8px; }
+
+.word {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.word.good { color: var(--green); background: var(--green-bg); }
+.word.fair { color: #8a6100; background: #fff4d6; }
+.word.poor { color: var(--red); background: var(--red-bg); }
+.word.omission { color: var(--muted); background: #eee; text-decoration: line-through; }
+
+.legend { margin: 0; font-size: 12px; }
+.legend .word { padding: 1px 6px; font-size: 11px; }
