@@ -3,35 +3,76 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text-to-Speech</title>
+  <title>Azure Speech Services</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <main class="card">
-    <h1>🎤 Text-to-Speech</h1>
-    <p class="subtitle">Powered by Azure Cognitive Services</p>
+    <h1>🎤 Azure Speech Services</h1>
+    <p class="subtitle">Text-to-Speech &amp; Speech-to-Text powered by Azure Cognitive Services</p>
 
-    <label for="tts-text">Enter text to convert to speech:</label>
-    <textarea id="tts-text" rows="5" maxlength="1000" placeholder="Hello, EE471 class"></textarea>
+    <nav class="tabs" role="tablist">
+      <button type="button" class="tab active" role="tab" data-panel="tts-panel" aria-selected="true">Text to Speech</button>
+      <button type="button" class="tab" role="tab" data-panel="stt-panel" aria-selected="false">Speech to Text</button>
+    </nav>
 
-    <label for="tts-voice">Voice:</label>
-    <select id="tts-voice">
-      {% for value, label in voices.items() %}
-      <option value="{{ value }}" {% if value == default_voice %}selected{% endif %}>{{ label }}</option>
-      {% endfor %}
-    </select>
+    <!-- Text to speech -->
+    <section id="tts-panel" class="panel" role="tabpanel">
+      <label for="tts-text">Enter text to convert to speech:</label>
+      <textarea id="tts-text" rows="5" maxlength="1000" placeholder="Hello, EE471 class"></textarea>
 
-    <div class="button-row">
-      <button type="button" class="button primary" id="tts-synthesize">🔊 Synthesize Speech</button>
-      <button type="button" class="button secondary" id="tts-clear">Clear</button>
-    </div>
+      <label for="tts-voice">Voice:</label>
+      <select id="tts-voice">
+        {% for value, label in voices.items() %}
+        <option value="{{ value }}" {% if value == default_voice %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
 
-    <p id="tts-status" class="status" hidden></p>
+      <div class="button-row">
+        <button type="button" class="button primary" id="tts-synthesize">🔊 Synthesize Speech</button>
+        <button type="button" class="button secondary" id="tts-clear">Clear</button>
+      </div>
 
-    <section id="tts-result" class="result" hidden>
-      <h2>Generated Audio:</h2>
-      <audio id="tts-audio" controls></audio>
-      <a id="tts-download" class="button download" download="speech.wav">⬇ Download Audio</a>
+      <p id="tts-status" class="status" hidden></p>
+
+      <section id="tts-result" class="result" hidden>
+        <h2>Generated Audio:</h2>
+        <audio id="tts-audio" controls></audio>
+        <a id="tts-download" class="button download" download="speech.wav">⬇ Download Audio</a>
+      </section>
+    </section>
+
+    <!-- Speech to text -->
+    <section id="stt-panel" class="panel" role="tabpanel" hidden>
+      <label>Record or upload audio to convert to text:</label>
+      <div class="record-row">
+        <button type="button" class="button primary" id="stt-start">🎙️ Start Recording</button>
+        <button type="button" class="button danger" id="stt-stop" disabled>⏹ Stop Recording</button>
+        <input type="file" id="stt-file" accept="audio/*">
+      </div>
+
+      <label for="stt-language">Language:</label>
+      <select id="stt-language">
+        {% for value, label in languages.items() %}
+        <option value="{{ value }}" {% if value == default_language %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+
+      <p id="stt-recording" class="status recording" hidden>● Recording…</p>
+      <audio id="stt-preview" controls hidden></audio>
+
+      <div class="button-row">
+        <button type="button" class="button primary" id="stt-transcribe">📝 Transcribe Audio</button>
+        <button type="button" class="button secondary" id="stt-clear">Clear</button>
+      </div>
+
+      <section id="stt-result" class="result transcript" hidden>
+        <h2>Transcription:</h2>
+        <p id="stt-text" class="transcript-text"></p>
+        <button type="button" class="button secondary small" id="stt-copy">📋 Copy Text</button>
+      </section>
+
+      <p id="stt-status" class="status" hidden></p>
     </section>
   </main>
 
