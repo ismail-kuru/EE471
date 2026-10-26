@@ -1,21 +1,7 @@
-// Speech-to-text: record from the microphone or pick a file, convert it to WAV
-// in the browser, and send it to Flask, which asks Azure for the transcript.
-const sttStart = document.getElementById("stt-start");
-const sttStop = document.getElementById("stt-stop");
-const sttFile = document.getElementById("stt-file");
-const sttLanguage = document.getElementById("stt-language");
-const sttRecording = document.getElementById("stt-recording");
-const sttPreview = document.getElementById("stt-preview");
-const sttTranscribe = document.getElementById("stt-transcribe");
-const sttResult = document.getElementById("stt-result");
-const sttText = document.getElementById("stt-text");
-const sttStatus = document.getElementById("stt-status");
+// One page, two tabs: text to speech and speech to text. Azure work happens in Flask;
+// this file handles the page and, for speech to text, converts audio to WAV.
 
-// Azure's Python SDK reads 16-bit PCM WAV; 16 kHz mono is what speech recognition expects.
-const TARGET_SAMPLE_RATE = 16000;
-
-let recorder = null;
-let recordedBlob = null;
+// --- Shared helpers ---
 
 function showStatus(element, kind, message) {
   element.className = `status ${kind}`;
@@ -33,8 +19,90 @@ async function errorMessage(response) {
   }
 }
 
-// --- Audio conversion: any format the browser can play → 16 kHz mono 16-bit WAV ---
+// --- Tabs ---
 
+const tabs = document.querySelectorAll(".tab");
+
+tabs.forEach((tab) => {
+  tab.addEventListener("click", () => {
+    tabs.forEach((other) => {
+      const active = other === tab;
+      other.classList.toggle("active", active);
+      other.setAttribute("aria-selected", String(active));
+      document.getElementById(other.dataset.panel).hidden = !active;
+    });
+  });
+});
+
+// --- Text to speech: send the text to Flask, which asks Azure for a WAV file ---
+
+const ttsText = document.getElementById("tts-text");
+const ttsVoice = document.getElementById("tts-voice");
+const ttsButton = document.getElementById("tts-synthesize");
+const ttsStatus = document.getElementById("tts-status");
+const ttsResult = document.getElementById("tts-result");
+const ttsAudio = document.getElementById("tts-audio");
+const ttsDownload = document.getElementById("tts-download");
+
+let audioUrl = null;
+
+async function synthesize() {
+  ttsButton.disabled = true;
+  showStatus(ttsStatus, "working", "Synthesizing…");
+  try {
+    const response = await fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: ttsText.value, voice: ttsVoice.value }),
+    });
+    if (!response.ok) {
+      throw new Error(await errorMessage(response));
+    }
+    const audio = await response.blob();
+    // Free the previous audio's memory before making a new URL.
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
+    audioUrl = URL.createObjectURL(audio);
+    ttsAudio.src = audioUrl;
+    ttsDownload.href = audioUrl;
+    ttsResult.hidden = false;
+    showStatus(ttsStatus, "success", "✓ Speech synthesized successfully!");
+  } catch (error) {
+    showStatus(ttsStatus, "error", error.message);
+  } finally {
+    ttsButton.disabled = false;
+  }
+}
+
+function clearTts() {
+  ttsText.value = "";
+  ttsStatus.hidden = true;
+  ttsResult.hidden = true;
+  ttsAudio.removeAttribute("src");
+}
+
+ttsButton.addEventListener("click", synthesize);
+document.getElementById("tts-clear").addEventListener("click", clearTts);
+
+// --- Speech to text: record or pick a file, convert it to WAV, and send it to Flask ---
+
+const sttStart = document.getElementById("stt-start");
+const sttStop = document.getElementById("stt-stop");
+const sttFile = document.getElementById("stt-file");
+const sttLanguage = document.getElementById("stt-language");
+const sttRecording = document.getElementById("stt-recording");
+const sttPreview = document.getElementById("stt-preview");
+const sttTranscribe = document.getElementById("stt-transcribe");
+const sttResult = document.getElementById("stt-result");
+const sttText = document.getElementById("stt-text");
+const sttStatus = document.getElementById("stt-status");
+
+// Azure's Python SDK reads 16-bit PCM WAV; 16 kHz mono is what speech recognition expects.
+const TARGET_SAMPLE_RATE = 16000;
+
+let recorder = null;
+let recordedBlob = null;
+
+// Any format the browser can play → 16 kHz mono 16-bit WAV.
 async function toWav(blob) {
   const context = new AudioContext();
   let decoded;
@@ -82,8 +150,6 @@ function encodeWav(samples, sampleRate) {
   return new Blob([view], { type: "audio/wav" });
 }
 
-// --- Recording ---
-
 async function startRecording() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -114,8 +180,6 @@ function stopRecording() {
   sttStop.disabled = true;
   sttRecording.hidden = true;
 }
-
-// --- Transcription ---
 
 async function transcribe() {
   // A newly chosen file wins over an older recording.

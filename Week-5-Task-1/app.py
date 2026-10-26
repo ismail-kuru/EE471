@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, Response, jsonify, render_template, request
 from werkzeug.exceptions import RequestEntityTooLarge
 
 import speech
@@ -36,8 +36,22 @@ def azure_failed(error):
 @app.get("/")
 def index():
     return render_template(
-        "index.html", languages=speech.LANGUAGES, default_language=speech.DEFAULT_LANGUAGE
+        "index.html",
+        voices=speech.VOICES,
+        default_voice=speech.DEFAULT_VOICE,
+        languages=speech.LANGUAGES,
+        default_language=speech.DEFAULT_LANGUAGE,
     )
+
+
+@app.post("/api/tts")
+def text_to_speech():
+    """Body: {"text": "...", "voice": "en-US-JennyNeural"} → WAV audio."""
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        raise ValueError("Request body must be a JSON object.")
+    audio = speech.synthesize(data.get("text"), data.get("voice", speech.DEFAULT_VOICE))
+    return Response(audio, mimetype="audio/wav")
 
 
 @app.post("/api/stt")

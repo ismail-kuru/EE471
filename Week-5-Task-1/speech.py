@@ -11,7 +11,17 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).resolve().parent / ".env")
 
-# Languages offered on the page; the API only accepts these.
+# Voices offered for text to speech; the API only accepts these.
+VOICES = {
+    "en-US-JennyNeural": "English (US) – Jenny",
+    "en-US-GuyNeural": "English (US) – Guy",
+    "tr-TR-EmelNeural": "Turkish – Emel",
+    "tr-TR-AhmetNeural": "Turkish – Ahmet",
+}
+DEFAULT_VOICE = "en-US-JennyNeural"
+MAX_TEXT_LENGTH = 1000
+
+# Languages offered for speech to text; the API only accepts these.
 LANGUAGES = {
     "en-US": "English (US)",
     "tr-TR": "Turkish",
@@ -40,6 +50,40 @@ def _speech_config():
         raise SpeechConfigError("Set AZURE_SPEECH_KEY and AZURE_SPEECH_REGION in Week-5-Task-1/.env.")
     return speechsdk.SpeechConfig(subscription=key, region=region)
 
+
+# --- Text to speech ---
+
+def synthesize(text, voice=DEFAULT_VOICE):
+    """Turn text into speech and return it as WAV bytes.
+
+    Raises:
+        ValueError: If the text is empty or too long, or the voice is unknown.
+        SpeechConfigError: If the Azure credentials are missing.
+        SpeechServiceError: If Azure rejects or cancels the request.
+    """
+    if not isinstance(text, str) or not text.strip():
+        raise ValueError("Please enter some text.")
+    if len(text) > MAX_TEXT_LENGTH:
+        raise ValueError(f"Text is too long (max {MAX_TEXT_LENGTH} characters).")
+    if voice not in VOICES:
+        raise ValueError(f"Unknown voice '{voice}'.")
+
+    config = _speech_config()
+    config.speech_synthesis_voice_name = voice
+    config.set_speech_synthesis_output_format(
+        speechsdk.SpeechSynthesisOutputFormat.Riff24Khz16BitMonoPcm
+    )
+    # audio_config=None keeps the audio in memory instead of playing it on the server's speakers.
+    synthesizer = speechsdk.SpeechSynthesizer(speech_config=config, audio_config=None)
+    result = synthesizer.speak_text_async(text.strip()).get()
+
+    if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+        return result.audio_data
+    details = result.cancellation_details
+    raise SpeechServiceError(f"Azure could not synthesize the text: {details.error_details or details.reason}")
+
+
+# --- Speech to text ---
 
 def _check_wav(path):
     """Raise ValueError unless the file is a 16-bit PCM WAV that Azure can read."""
