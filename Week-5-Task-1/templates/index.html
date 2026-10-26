@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text-to-Speech</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="card">
+    <h1>🎤 Text-to-Speech</h1>
+    <p class="subtitle">Powered by Azure Cognitive Services</p>
+
+    <label for="tts-text">Enter text to convert to speech:</label>
+    <textarea id="tts-text" rows="5" maxlength="1000" placeholder="Hello, EE471 class"></textarea>
+
+    <label for="tts-voice">Voice:</label>
+    <select id="tts-voice">
+      {% for value, label in voices.items() %}
+      <option value="{{ value }}" {% if value == default_voice %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+
+    <div class="button-row">
+      <button type="button" class="button primary" id="tts-synthesize">🔊 Synthesize Speech</button>
+      <button type="button" class="button secondary" id="tts-clear">Clear</button>
+    </div>
+
+    <p id="tts-status" class="status" hidden></p>
+
+    <section id="tts-result" class="result" hidden>
+      <h2>Generated Audio:</h2>
+      <audio id="tts-audio" controls></audio>
+      <a id="tts-download" class="button download" download="speech.wav">⬇ Download Audio</a>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
