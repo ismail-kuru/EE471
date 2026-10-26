@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voice Calculator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="calculator">
+    <button type="button" class="mic" id="mic" aria-label="Give a voice command" title="Click, say e.g. “five plus two is”, then click again">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="9" y="3" width="6" height="11" rx="3"/>
+        <path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/>
+      </svg>
+    </button>
+
+    <div class="body">
+      <output id="display" class="display" aria-live="polite">0</output>
+      <div class="keys">
+        {# The spoken word for every key comes from the command table in commands.py. #}
+        {% for key, word in key_words.items() %}
+        {% set kind = "equals" if key == "=" else ("operator" if key in "÷×−+" else "digit") %}
+        <button type="button" class="key {{ kind }}" data-key="{{ key }}" data-word="{{ word }}">{{ key }}</button>
+        {% endfor %}
+      </div>
+    </div>
+  </main>
+
+  <p id="voice-status" class="voice-status" aria-live="polite">Click 🎙️, say a command such as “five plus two is”, then click 🎙️ again.</p>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

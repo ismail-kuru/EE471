@@ -1,0 +1,136 @@
+/* Calculator colors and sizes come from the Week 4 Figma design (design/calculator.png). */
+:root {
+  --frame: #0072ce;
+  --display-bg: #ffffff;
+  --digit: #7f7f7f;
+  --operator: #a6a6a6;
+  --equals: #00509e;
+  --key-text: #ffffff;
+  --key-gap: 12px;
+  --mic: #a6a6a6;
+  --listening: #e53935;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #f2f2f2;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.calculator {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 15px 31px 17px 20px;
+  background: var(--frame);
+  border-radius: 13px;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  width: 267px;
+}
+
+/* --- Microphone button on the left --- */
+
+.mic {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border: 3px solid #5f5f5f;
+  border-radius: 50%;
+  background: var(--mic);
+  cursor: pointer;
+}
+
+.mic svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: #333;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.mic.listening {
+  background: var(--listening);
+  border-color: #b71c1c;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.mic.listening svg { stroke: #fff; }
+.mic:disabled { opacity: 0.6; cursor: wait; }
+
+@keyframes pulse {
+  50% { box-shadow: 0 0 0 8px rgba(229, 57, 53, 0.35); }
+}
+
+/* --- Display and keys --- */
+
+.display {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 83px;
+  padding: 0 24px;
+  line-height: 83px;
+  background: var(--display-bg);
+  border-radius: 30px;
+  font-size: 36px;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.display.error {
+  color: #c62828;
+  font-size: 16px;
+}
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(4, 55px);
+  grid-auto-rows: 49px;
+  gap: var(--key-gap);
+}
+
+.key {
+  border: none;
+  border-radius: 50%;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--key-text);
+  background: var(--digit);
+  cursor: pointer;
+  transition: transform 0.08s;
+}
+
+.key.operator { background: var(--operator); }
+.key.equals { background: var(--equals); }
+.key:hover { filter: brightness(1.1); }
+.key:active,
+.key.pressed { filter: brightness(0.85); transform: scale(0.92); }
+
+/* --- What the calculator heard --- */
+
+.voice-status {
+  max-width: 420px;
+  margin: 0;
+  color: #555;
+  font-size: 14px;
+  text-align: center;
+}
+
+.voice-status.error { color: #c62828; }
