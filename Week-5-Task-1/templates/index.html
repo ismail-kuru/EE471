@@ -1,3 +1,24 @@
+{# Record/upload controls, used by every tab that takes audio. prefix keeps the ids unique. #}
+{% macro audio_input(prefix, label="Record or upload audio:") %}
+<label>{{ label }}</label>
+<div class="record-row">
+  <button type="button" class="button primary" id="{{ prefix }}-start">🎙️ Start Recording</button>
+  <button type="button" class="button danger" id="{{ prefix }}-stop" disabled>⏹ Stop Recording</button>
+  <input type="file" id="{{ prefix }}-file" accept="audio/*">
+</div>
+<p id="{{ prefix }}-recording" class="status recording" hidden>● Recording…</p>
+<audio id="{{ prefix }}-preview" class="preview" controls hidden></audio>
+{% endmacro %}
+
+{% macro language_select(id, label="Spoken language:") %}
+<label for="{{ id }}">{{ label }}</label>
+<select id="{{ id }}">
+  {% for value, name in languages.items() %}
+  <option value="{{ value }}" {% if value == default_language %}selected{% endif %}>{{ name }}</option>
+  {% endfor %}
+</select>
+{% endmacro %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,11 +30,14 @@
 <body>
   <main class="card">
     <h1>🎤 Azure Speech Services</h1>
-    <p class="subtitle">Text-to-Speech &amp; Speech-to-Text powered by Azure Cognitive Services</p>
+    <p class="subtitle">Text-to-Speech, Speech-to-Text and more, powered by Azure Cognitive Services</p>
 
     <nav class="tabs" role="tablist">
       <button type="button" class="tab active" role="tab" data-panel="tts-panel" aria-selected="true">Text to Speech</button>
       <button type="button" class="tab" role="tab" data-panel="stt-panel" aria-selected="false">Speech to Text</button>
+      <button type="button" class="tab" role="tab" data-panel="dia-panel" aria-selected="false">Diarization</button>
+      <button type="button" class="tab" role="tab" data-panel="tr-panel" aria-selected="false">Translation</button>
+      <button type="button" class="tab" role="tab" data-panel="pa-panel" aria-selected="false">Pronunciation</button>
     </nav>
 
     <!-- Text to speech -->
@@ -44,22 +68,8 @@
 
     <!-- Speech to text -->
     <section id="stt-panel" class="panel" role="tabpanel" hidden>
-      <label>Record or upload audio to convert to text:</label>
-      <div class="record-row">
-        <button type="button" class="button primary" id="stt-start">🎙️ Start Recording</button>
-        <button type="button" class="button danger" id="stt-stop" disabled>⏹ Stop Recording</button>
-        <input type="file" id="stt-file" accept="audio/*">
-      </div>
-
-      <label for="stt-language">Language:</label>
-      <select id="stt-language">
-        {% for value, label in languages.items() %}
-        <option value="{{ value }}" {% if value == default_language %}selected{% endif %}>{{ label }}</option>
-        {% endfor %}
-      </select>
-
-      <p id="stt-recording" class="status recording" hidden>● Recording…</p>
-      <audio id="stt-preview" controls hidden></audio>
+      {{ audio_input("stt", "Record or upload audio to convert to text:") }}
+      {{ language_select("stt-language", "Language:") }}
 
       <div class="button-row">
         <button type="button" class="button primary" id="stt-transcribe">📝 Transcribe Audio</button>
@@ -73,6 +83,76 @@
       </section>
 
       <p id="stt-status" class="status" hidden></p>
+    </section>
+
+    <!-- Diarization -->
+    <section id="dia-panel" class="panel" role="tabpanel" hidden>
+      <p class="hint">Transcribes a conversation and labels who is speaking. Lines appear live as Azure recognizes them. Use a recording with two or more speakers.</p>
+      {{ audio_input("dia", "Record or upload a conversation:") }}
+      {{ language_select("dia-language") }}
+
+      <div class="button-row">
+        <button type="button" class="button primary" id="dia-run">👥 Transcribe Speakers</button>
+        <button type="button" class="button secondary" id="dia-clear">Clear</button>
+      </div>
+
+      <p id="dia-status" class="status" hidden></p>
+      <ol id="dia-lines" class="speaker-lines" hidden></ol>
+    </section>
+
+    <!-- Translation -->
+    <section id="tr-panel" class="panel" role="tabpanel" hidden>
+      {{ audio_input("tr", "Record or upload speech to translate:") }}
+      <div class="form-row">
+        <div>{{ language_select("tr-source") }}</div>
+        <div>
+          <label for="tr-target">Translate to:</label>
+          <select id="tr-target">
+            {% for code, name in targets.items() %}
+            <option value="{{ code }}" {% if code == "tr" %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="button-row">
+        <button type="button" class="button primary" id="tr-run">🌍 Translate Speech</button>
+        <button type="button" class="button secondary" id="tr-clear">Clear</button>
+      </div>
+
+      <section id="tr-result" class="result transcript" hidden>
+        <h2>Recognized:</h2>
+        <p id="tr-recognized" class="transcript-text"></p>
+        <h2>Translation:</h2>
+        <p id="tr-translation" class="transcript-text"></p>
+        <button type="button" class="button secondary small" id="tr-speak">🔊 Speak Translation</button>
+        <audio id="tr-audio" class="preview" controls hidden></audio>
+      </section>
+
+      <p id="tr-status" class="status" hidden></p>
+    </section>
+
+    <!-- Pronunciation assessment -->
+    <section id="pa-panel" class="panel" role="tabpanel" hidden>
+      <label for="pa-reference">Sentence to read aloud (English):</label>
+      <textarea id="pa-reference" rows="2" maxlength="300">The quick brown fox jumps over the lazy dog.</textarea>
+      {{ audio_input("pa", "Record yourself reading it (or upload a recording):") }}
+
+      <div class="button-row">
+        <button type="button" class="button primary" id="pa-run">🎯 Assess Pronunciation</button>
+        <button type="button" class="button secondary" id="pa-clear">Clear</button>
+      </div>
+
+      <section id="pa-result" class="result" hidden>
+        <h2>Scores (0–100):</h2>
+        <div id="pa-scores" class="scores"></div>
+        <h2>Words:</h2>
+        <p id="pa-words" class="words"></p>
+        <p class="legend"><span class="word good">good</span> <span class="word fair">fair</span> <span class="word poor">poor</span> <span class="word omission">skipped</span></p>
+        <p class="hint">Azure heard: <span id="pa-recognized"></span></p>
+      </section>
+
+      <p id="pa-status" class="status" hidden></p>
     </section>
   </main>
 
