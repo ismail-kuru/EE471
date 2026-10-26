@@ -210,6 +210,8 @@ async function toWav(blob) {
   let decoded;
   try {
     decoded = await context.decodeAudioData(await blob.arrayBuffer());
+  } catch {
+    throw new Error("The recording could not be read. Please try again.");
   } finally {
     context.close();
   }
@@ -261,14 +263,16 @@ async function startListening() {
     return;
   }
   const chunks = [];
-  recorder = new MediaRecorder(stream);
-  recorder.addEventListener("dataavailable", (event) => chunks.push(event.data));
-  recorder.addEventListener("stop", () => {
+  // Keep a local reference: stopListening() clears `recorder` before the "stop" event fires.
+  const mediaRecorder = new MediaRecorder(stream);
+  mediaRecorder.addEventListener("dataavailable", (event) => chunks.push(event.data));
+  mediaRecorder.addEventListener("stop", () => {
     // Turn the microphone off as soon as recording ends.
     stream.getTracks().forEach((track) => track.stop());
-    runVoiceCommand(new Blob(chunks, { type: recorder.mimeType }));
+    runVoiceCommand(new Blob(chunks, { type: mediaRecorder.mimeType }));
   });
-  recorder.start();
+  mediaRecorder.start();
+  recorder = mediaRecorder;
   mic.classList.add("listening");
   setStatus("Listening… say e.g. “five plus two is”, then click 🎙️ again.");
 }
