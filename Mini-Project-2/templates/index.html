@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="toolbar">
+    <label class="toggle">
+      <input type="checkbox" id="available-only">
+      <span class="toggle-track" aria-hidden="true"></span>
+      Available Only
+    </label>
+
+    <div class="segmented" role="group" aria-label="Filter by type">
+      <button type="button" class="segment active" data-type="">All</button>
+      <button type="button" class="segment" data-type="book">Books</button>
+      <button type="button" class="segment" data-type="dvd">DVDs</button>
+    </div>
+
+    <div class="toolbar-actions">
+      <button type="button" class="button secondary" id="mic">🎙️ Speak</button>
+      <button type="button" class="button primary" id="add-button">+ Add Item</button>
+    </div>
+  </header>
+
+  <section class="voice-panel">
+    <p id="voice-status" class="voice-status" role="status">Click “Speak”, say a command, then click again to send it.</p>
+    <details>
+      <summary>What can I say?</summary>
+      <ul>
+        <li><b>Create:</b> “Create item, type book, title The Catcher in the Rye, author J.D. Salinger, pages 220” or “Add a DVD called Alien, directed by Ridley Scott, 117 minutes”</li>
+        <li><b>List:</b> “List all items”, “Show available DVDs” or “Which books are checked out?”</li>
+        <li><b>Get one:</b> “Get item 3” or “Tell me about item 3”</li>
+        <li><b>Replace:</b> “Replace item 3, title Emma, author Jane Austen, pages 400”</li>
+        <li><b>Change:</b> “Update item 3, pages 200” or “Change the title of item 3 to Emma”</li>
+        <li><b>Delete:</b> “Delete item 3” or “Remove item 3”</li>
+        <li><b>Check out:</b> “Check out item 3” or “Borrow item 3”</li>
+        <li><b>Return:</b> “Return item 3” or “Bring back item 3”</li>
+      </ul>
+    </details>
+  </section>
+
+  <div id="error-area" class="error-area" role="alert" hidden>
+    <span id="error-message"></span>
+    <button type="button" class="error-close" id="error-close" aria-label="Dismiss">×</button>
+  </div>
+
+  <main>
+    <section id="item-list" class="item-list" aria-live="polite"></section>
+    <p id="empty-state" class="empty-state" hidden></p>
+  </main>
+
+  <dialog id="item-dialog" class="dialog">
+    <form id="item-form" method="dialog" novalidate>
+      <h2 id="dialog-title">Add New Item</h2>
+
+      <label>Title
+        <input type="text" id="field-title" autocomplete="off">
+      </label>
+
+      <label>Author / Director
+        <input type="text" id="field-author" autocomplete="off">
+      </label>
+
+      <div class="form-row">
+        <label>Media Type
+          <select id="field-type">
+            <option value="book">Book</option>
+            <option value="dvd">DVD</option>
+          </select>
+        </label>
+        <label><span id="size-label">Page Count</span>
+          <input type="number" id="field-size" min="1" step="1">
+        </label>
+      </div>
+
+      <p id="form-error" class="form-error" role="alert" hidden></p>
+
+      <div class="dialog-actions">
+        <button type="button" class="button secondary" id="cancel-button">Cancel</button>
+        <button type="submit" class="button primary">Save Item</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
