@@ -1,0 +1,7 @@
+build:
+  python_version: "3.13"
+  python_requirements: requirements.txt
+  run:
+    # Store the model's weights in the image, so the container never has to download them.
+    - TORCH_HOME=/opt/torch python -c "from torchvision import models; models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)"
+run: "run.py:Runner"

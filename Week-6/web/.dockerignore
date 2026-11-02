@@ -1,0 +1,6 @@
+# Not sent to Docker when building.
+.venv/
+__pycache__/
+.DS_Store
+Dockerfile
+.dockerignore
