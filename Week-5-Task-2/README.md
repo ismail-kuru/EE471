@@ -29,6 +29,25 @@ cp .env.example .env        # then put your Azure Speech key and region in .env
 
 `.env` holds the secret key and is never pushed (see the repository's `.gitignore`).
 
+## Run with Docker
+
+Start Docker Desktop and create `.env` as above, then:
+
+```bash
+cd Week-5-Task-2
+docker build -t voice-calculator .
+docker run --rm --name voice-calculator -p 5002:5001 --env-file .env voice-calculator
+```
+
+Open http://localhost:5002 and allow the microphone. Press `Ctrl+C` in the terminal to stop.
+Flask's log says `Running on http://127.0.0.1:5001`, but that is the port inside the
+container; from your computer, use port 5002.
+
+`--env-file` gives the Azure key to the container when it starts, so the key is never
+stored in the image. `-p 5002:5001` connects port 5002 on your computer to port 5001 in
+the container. The page must be opened through `localhost`, because browsers only allow
+the microphone on `localhost` or HTTPS.
+
 ## How it works
 
 | File | Role |
