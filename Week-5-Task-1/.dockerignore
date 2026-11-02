@@ -1,0 +1,10 @@
+# Not sent to Docker when building: secrets, the local virtual environment and project notes.
+.env
+.venv/
+__pycache__/
+.vscode/
+.DS_Store
+PROMPTS.md
+README.md
+Dockerfile
+.dockerignore

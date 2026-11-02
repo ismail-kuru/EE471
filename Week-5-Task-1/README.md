@@ -34,6 +34,23 @@ cp .env.example .env        # then put your Azure Speech key and region in .env
 on your computer and is never pushed. The scripts read it with `python-dotenv`. The same
 key and region work for both features.
 
+## Run with Docker
+
+Start Docker Desktop and create `.env` as above, then:
+
+```bash
+cd Week-5-Task-1
+docker build -t speech-studio .
+docker run --rm --name speech-studio -p 5001:5001 --env-file .env speech-studio
+```
+
+Open http://localhost:5001 and allow the microphone. Press `Ctrl+C` in the terminal to stop.
+
+`--env-file` gives the Azure key to the container when it starts, so the key is never
+stored in the image. `-p 5001:5001` connects port 5001 on your computer to port 5001 in
+the container. The page must be opened through `localhost`, because browsers only allow
+the microphone on `localhost` or HTTPS.
+
 ## API
 
 | Endpoint | Body | Success | Errors |

@@ -8,6 +8,7 @@ __pycache__/
 # Generated output
 output.wav
 generated/
+.cog/
 
 # macOS
 .DS_Store

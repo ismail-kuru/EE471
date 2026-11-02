@@ -1,0 +1,100 @@
+:root {
+  --page: #eef1f5;
+  --card: #ffffff;
+  --border: #dde1e8;
+  --text: #1c2233;
+  --muted: #6b7280;
+  --navy: #1f2a5c;
+  --navy-hover: #2b3a7a;
+  --red: #c62828;
+  --red-bg: #fdecec;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 32px 16px;
+  background: var(--page);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15px;
+}
+
+.panel {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+h1 { margin: 0 0 4px; font-size: 24px; }
+.intro { margin: 0 0 20px; color: var(--muted); }
+
+/* --- Choosing an image --- */
+
+.file-button {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.file-button:hover { background: #f4f6f9; }
+.file-button:focus-within { outline: 2px solid var(--navy); outline-offset: 2px; }
+.file-button input { position: absolute; opacity: 0; width: 0; }
+
+.file-name { margin-left: 8px; color: var(--muted); overflow-wrap: anywhere; }
+
+.preview {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  margin-top: 16px;
+  object-fit: contain;
+  background: var(--page);
+  border-radius: var(--radius);
+}
+
+.classify {
+  width: 100%;
+  margin-top: 16px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: var(--navy);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.classify:hover:not(:disabled) { background: var(--navy-hover); }
+.classify:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* --- Result --- */
+
+.error {
+  margin: 16px 0 0;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: var(--red-bg);
+  color: var(--red);
+  font-weight: 600;
+}
+
+.result { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+.result-label { margin: 0; color: var(--muted); }
+.result h2 { margin: 2px 0; font-size: 26px; text-transform: capitalize; }
+.result-confidence { margin: 0; color: var(--muted); }
+
+.kinds { margin: 16px 0 0; padding: 0; list-style: none; }
+.kinds li { margin-bottom: 10px; }
+.kind-row { display: flex; justify-content: space-between; margin-bottom: 4px; text-transform: capitalize; }
+.kind-bar { height: 8px; background: var(--page); border-radius: 4px; overflow: hidden; }
+.kind-fill { height: 100%; background: var(--navy); }

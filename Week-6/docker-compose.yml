@@ -1,0 +1,26 @@
+# Runs the two containers of the cat classifier together.
+# Build the model image first: cd model && cog build -t cat-classifier-model
+services:
+  # The Cog container: the ResNet-50 model behind an HTTP API.
+  model:
+    image: cat-classifier-model
+    # The image comes from cog build, so never try to download it from Docker Hub.
+    pull_policy: never
+    container_name: cat-model
+    # Cog builds for Intel/AMD. Saying so here runs it under emulation without a warning on Apple Silicon.
+    platform: linux/amd64
+    ports:
+      # Mac port 5003 → Cog's port 5000 (port 5000 on the Mac is taken by AirPlay Receiver).
+      - "5003:5000"
+
+  # The website: Flask, built from web/Dockerfile.
+  web:
+    build: ./web
+    container_name: cat-web
+    environment:
+      # Containers in the same Compose project reach each other by service name.
+      MODEL_URL: http://model:5000
+    ports:
+      - "5005:5001"
+    depends_on:
+      - model
