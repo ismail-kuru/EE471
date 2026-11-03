@@ -67,12 +67,13 @@ SCALES = {"hundred": 100, "thousand": 1000}
 HOMOPHONES = {"won": 1, "to": 2, "too": 2, "tree": 3, "for": 4, "fore": 4, "ate": 8}
 
 _NUMBER_WORD = "|".join([*UNITS, *TENS, *SCALES])
-NUMBER = rf"\d[\d,.]*\d|\d|(?:{_NUMBER_WORD})(?:[\s-]+(?:and\s+)?(?:{_NUMBER_WORD}))*"
+# Azure sometimes writes a spoken number as a time: "pages 230" becomes "pages 2:30".
+NUMBER = rf"\d{{1,2}}:\d{{2}}|\d[\d,.]*\d|\d|(?:{_NUMBER_WORD})(?:[\s-]+(?:and\s+)?(?:{_NUMBER_WORD}))*"
 
 
 def _to_number(text):
     """Return text as an int, or unchanged if it is not a whole number (the API rejects it)."""
-    cleaned = text.replace(",", "")
+    cleaned = text.replace(",", "").replace(":", "")
     if cleaned.isdigit():
         return int(cleaned)
     total = current = 0
@@ -142,7 +143,8 @@ def _item_type(match):
 
 def _take_number_field(text, labels, units):
     """Find "pages 220", "220 pages" or "duration 148 minutes"; return (value or None, rest)."""
-    labeled = rf"\b(?:{labels})\b(?:\s+(?:is|to|of|are)\b)?[\s:=,]*({NUMBER})\b(?:\s*(?:{units})\b)?"
+    # The dot is for Azure's punctuation, as in "Duration. 137 minutes."
+    labeled = rf"\b(?:{labels})\b(?:\s+(?:is|to|of|are)\b)?[\s:=,.]*({NUMBER})\b(?:\s*(?:{units})\b)?"
     unit_after = rf"\b({NUMBER})[\s-]*(?:{units})\b"
     match = re.search(labeled, text, re.IGNORECASE) or re.search(unit_after, text, re.IGNORECASE)
     if not match:
