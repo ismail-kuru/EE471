@@ -9,6 +9,8 @@ __pycache__/
 output.wav
 generated/
 .cog/
+Week-7/data/
+Week-7/runs/
 
 # macOS
 .DS_Store
