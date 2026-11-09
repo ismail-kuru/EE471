@@ -1,0 +1,91 @@
+{
+  "dataset": "cifar10",
+  "classes": [
+    "plane",
+    "car",
+    "bird",
+    "cat",
+    "deer",
+    "dog",
+    "frog",
+    "horse",
+    "ship",
+    "truck"
+  ],
+  "hyperparameters": {
+    "lr": 0.003,
+    "momentum": 0.9,
+    "batch_size": 32,
+    "epochs": 10,
+    "shuffle": true,
+    "seed": 0
+  },
+  "accuracy": 0.6293,
+  "loss": 1.0593758742332458,
+  "per_class_accuracy": {
+    "plane": 0.633,
+    "car": 0.789,
+    "bird": 0.418,
+    "cat": 0.36,
+    "deer": 0.533,
+    "dog": 0.618,
+    "frog": 0.74,
+    "horse": 0.687,
+    "ship": 0.771,
+    "truck": 0.744
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 1.6472332773208618,
+      "accuracy": 0.3928
+    },
+    {
+      "epoch": 2,
+      "loss": 1.4249929061889648,
+      "accuracy": 0.4843
+    },
+    {
+      "epoch": 3,
+      "loss": 1.239092427444458,
+      "accuracy": 0.5593
+    },
+    {
+      "epoch": 4,
+      "loss": 1.198401644897461,
+      "accuracy": 0.5733
+    },
+    {
+      "epoch": 5,
+      "loss": 1.1405184585571289,
+      "accuracy": 0.5977
+    },
+    {
+      "epoch": 6,
+      "loss": 1.1337584676742554,
+      "accuracy": 0.5959
+    },
+    {
+      "epoch": 7,
+      "loss": 1.0911092213630675,
+      "accuracy": 0.6188
+    },
+    {
+      "epoch": 8,
+      "loss": 1.0689879217147826,
+      "accuracy": 0.6261
+    },
+    {
+      "epoch": 9,
+      "loss": 1.1041340509414672,
+      "accuracy": 0.6171
+    },
+    {
+      "epoch": 10,
+      "loss": 1.0593758742332458,
+      "accuracy": 0.6293
+    }
+  ],
+  "training_seconds": 115.9,
+  "device": "mps"
+}

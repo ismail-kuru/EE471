@@ -16,6 +16,7 @@ with setup instructions and their own `requirements.txt`.
 | [`Week-5-Task-2/`](Week-5-Task-2/) | Voice-activated calculator with Azure Speech; containerized in Week 6 | Done |
 | [`Mini-Project-2/`](Mini-Project-2/) | Voice-activated Library App: every library endpoint by voice, with spoken replies and errors | Done |
 | [`Week-6/`](Week-6/) | Docker and Cog: cat-kind classifier website using a pre-trained ResNet-50 model | Done |
+| [`Week-7/`](Week-7/) | PyTorch training and hyperparameter search for FashionMNIST and CIFAR10, with a side-by-side comparison website in Cog containers | Done |
 
 ## Workflow
 

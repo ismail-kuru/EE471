@@ -23,6 +23,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Train a classifier.")
     parser.add_argument("--dataset", required=True, choices=DATASETS)
     parser.add_argument("--lr", type=float, default=1e-3, help="learning rate")
+    parser.add_argument("--momentum", type=float, default=0.0, help="SGD momentum")
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--shuffle", action="store_true", help="mix the training images every epoch")
@@ -95,7 +96,7 @@ def main():
     train_loader, test_loader = load_data(settings, args.batch_size, args.shuffle)
     model = settings["model"]().to(device)
     loss_fn = nn.CrossEntropyLoss()
-    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr)
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
     history = []
     started = time.time()
@@ -111,7 +112,7 @@ def main():
         "dataset": args.dataset,
         "classes": settings["classes"],
         "hyperparameters": {
-            "lr": args.lr, "batch_size": args.batch_size, "epochs": args.epochs,
+            "lr": args.lr, "momentum": args.momentum, "batch_size": args.batch_size, "epochs": args.epochs,
             "shuffle": args.shuffle, "seed": args.seed,
         },
         "accuracy": result["accuracy"],

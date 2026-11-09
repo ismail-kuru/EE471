@@ -1,0 +1,51 @@
+{
+  "dataset": "cifar10",
+  "classes": [
+    "plane",
+    "car",
+    "bird",
+    "cat",
+    "deer",
+    "dog",
+    "frog",
+    "horse",
+    "ship",
+    "truck"
+  ],
+  "hyperparameters": {
+    "lr": 0.001,
+    "momentum": 0.9,
+    "batch_size": 4,
+    "epochs": 2,
+    "shuffle": true,
+    "seed": 0
+  },
+  "accuracy": 0.5216,
+  "loss": 1.3434904127717018,
+  "per_class_accuracy": {
+    "plane": 0.726,
+    "car": 0.708,
+    "bird": 0.299,
+    "cat": 0.423,
+    "deer": 0.367,
+    "dog": 0.489,
+    "frog": 0.458,
+    "horse": 0.58,
+    "ship": 0.57,
+    "truck": 0.596
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "loss": 1.435590064817667,
+      "accuracy": 0.4809
+    },
+    {
+      "epoch": 2,
+      "loss": 1.3434904127717018,
+      "accuracy": 0.5216
+    }
+  ],
+  "training_seconds": 99.7,
+  "device": "mps"
+}
