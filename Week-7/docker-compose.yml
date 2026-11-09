@@ -1,0 +1,64 @@
+# Runs the classifier containers and the website together.
+# Build the model image first: cd model && cog build -t week7-classifier
+
+# The settings all four Cog containers share. Each one adds its own name, weights and port.
+x-model: &model
+  image: week7-classifier
+  # The image comes from cog build, so never try to download it from Docker Hub.
+  pull_policy: never
+  # Cog builds for Intel/AMD. Saying so here runs it under emulation without a warning on Apple Silicon.
+  platform: linux/amd64
+
+services:
+  # Cog containers: the same image, each serving different weights behind an HTTP API.
+  # In each port pair, the left one is on the Mac and the right one is Cog's port in the container.
+  fashion-baseline:
+    <<: *model
+    container_name: fashion-baseline
+    environment:
+      # Which weights in model/weights this container loads.
+      MODEL_NAME: fashion-baseline
+    ports:
+      - "5003:5000"
+
+  fashion-optimized:
+    <<: *model
+    container_name: fashion-optimized
+    environment:
+      MODEL_NAME: fashion-optimized
+    ports:
+      - "5004:5000"
+
+  cifar10-baseline:
+    <<: *model
+    container_name: cifar10-baseline
+    environment:
+      MODEL_NAME: cifar10-baseline
+    ports:
+      - "5006:5000"
+
+  cifar10-optimized:
+    <<: *model
+    container_name: cifar10-optimized
+    environment:
+      MODEL_NAME: cifar10-optimized
+    ports:
+      - "5007:5000"
+
+  # The website: Flask, built from web/Dockerfile.
+  web:
+    build: ./web
+    container_name: classifier-web
+    environment:
+      # Containers in the same Compose project reach each other by service name.
+      FASHION_BASELINE_URL: http://fashion-baseline:5000
+      FASHION_OPTIMIZED_URL: http://fashion-optimized:5000
+      CIFAR10_BASELINE_URL: http://cifar10-baseline:5000
+      CIFAR10_OPTIMIZED_URL: http://cifar10-optimized:5000
+    ports:
+      - "5005:5001"
+    depends_on:
+      - fashion-baseline
+      - fashion-optimized
+      - cifar10-baseline
+      - cifar10-optimized

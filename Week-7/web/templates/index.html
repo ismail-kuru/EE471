@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Classifier</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="panel">
+    <div class="heading">
+      <h1 id="title">Garment Classifier</h1>
+      <div class="segmented" role="group" aria-label="Choose a classifier">
+        <button type="button" class="segment active" data-dataset="fashion">Garments</button>
+        <button type="button" class="segment" data-dataset="cifar10">CIFAR10</button>
+      </div>
+    </div>
+    <p id="intro" class="intro">Upload a picture of a piece of clothing and compare what the two models see.</p>
+
+    <form id="form">
+      <label class="file-button">
+        Choose image
+        <input type="file" id="image" accept="image/*">
+      </label>
+      <span id="file-name" class="file-name">No image chosen</span>
+
+      <img id="preview" class="preview" alt="The chosen image" hidden>
+
+      <button type="submit" id="classify" class="classify" disabled>Classify</button>
+    </form>
+
+    <p id="error" class="error" role="alert" hidden></p>
+
+    <section id="result" class="result" aria-live="polite" hidden>
+      <p id="agreement" class="agreement"></p>
+      <div class="comparison">
+        <article class="model-card" id="baseline">
+          <h2>Previous model</h2>
+          <div class="model-result"></div>
+        </article>
+        <article class="model-card" id="optimized">
+          <h2>Optimized model</h2>
+          <div class="model-result"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
