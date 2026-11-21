@@ -1,0 +1,3 @@
+# MediaPipe 1.2 includes the newer solutions (transcriber, text-to-speech, decision maker...).
+# It also installs OpenCV and NumPy, which the demos use for drawing.
+mediapipe==1.2.3
