@@ -15,3 +15,6 @@ Week-7/samples/
 
 # macOS
 .DS_Store
+
+# Week 8: MediaPipe models are downloaded, not committed
+Week-8/*/models/
