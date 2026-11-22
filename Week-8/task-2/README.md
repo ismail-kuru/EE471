@@ -51,7 +51,7 @@ Docker Desktop must be running and [Cog](https://github.com/replicate/cog) must 
 ```bash
 cd Week-8/task-2
 cog build -t arm-up
-cog predict arm-up -i image=@images/pose-1.jpg
+cog run arm-up -i image=@images/pose-1.jpg
 ```
 
 To try another image, replace the path after `image=@`.

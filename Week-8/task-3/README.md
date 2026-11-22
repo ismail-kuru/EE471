@@ -64,7 +64,7 @@ Docker Desktop must be running and [Cog](https://github.com/replicate/cog) must 
 ```bash
 cd Week-8/task-3
 cog build -t face-direction
-cog predict face-direction -i image=@images/face-1.png
+cog run face-direction -i image=@images/face-1.png
 ```
 
 To try another image, replace the path after `image=@`.
