@@ -1,0 +1,7 @@
+transformers==4.57.6
+torch==2.8.0
+huggingface_hub==0.36.2
+sentencepiece   # the tokenizer of the translation models (Helsinki-NLP/opus-mt-*)
+pillow          # opening images for the image classifier
+gradio==4.44.1  # Task 3; the last Gradio that runs on Python 3.9
+pydantic==2.10.6  # Gradio 4.44 fails with pydantic 2.11+ ("argument of type 'bool' is not iterable")
