@@ -18,3 +18,6 @@ Week-7/samples/
 
 # Week 8: MediaPipe models are downloaded, not committed
 Week-8/*/models/
+
+# Week 9: the model saved by Task 4 (268 MB) is recreated by load_and_save.py
+Week-9/task-4/saved_model/
