@@ -17,6 +17,9 @@ with setup instructions and their own `requirements.txt`.
 | [`Mini-Project-2/`](Mini-Project-2/) | Voice-activated Library App: every library endpoint by voice, with spoken replies and errors | Done |
 | [`Week-6/`](Week-6/) | Docker and Cog: cat-kind classifier website using a pre-trained ResNet-50 model | Done |
 | [`Week-7/`](Week-7/) | PyTorch training and hyperparameter search for FashionMNIST and CIFAR10, with a side-by-side comparison website in Cog containers | Done |
+| [`Week-8/`](Week-8/) | MediaPipe: demos of 22 solutions, a raised-arm classifier and a face direction classifier, the last two packaged with Cog | Done |
+| [`Week-9/`](Week-9/) | Hugging Face Transformers: ten `pipeline()` tasks, an object-oriented module with a Gradio demo, and tokenizer basics | Done |
+| [`Mini-Project-3/`](Mini-Project-3/) | AI Art Chat: a web app that paints images with Stable Diffusion Turbo and chats by voice with Whisper and SmolLM2, designed in Figma | Done |
 
 ## Workflow
 

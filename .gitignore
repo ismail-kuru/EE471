@@ -21,3 +21,6 @@ Week-8/*/models/
 
 # Week 9: the model saved by Task 4 (268 MB) is recreated by load_and_save.py
 Week-9/task-4/saved_model/
+
+# Personal notes, kept out of the repository
+PROMPTS.md

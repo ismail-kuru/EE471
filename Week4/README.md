@@ -41,8 +41,6 @@ curl -X POST http://127.0.0.1:5001/api/calculate \
      -d '{"a": 10, "b": 5, "operation": "add"}'
 ```
 
-Prompts and corrections: [`section1/PROMPTS.md`](section1/PROMPTS.md).
-
 ## Section 2: Library App
 
 Starting point: `custom_classes.py` and `main.py` from the merged Week 3 `main` branch.
@@ -91,5 +89,3 @@ Flask serves the page at <http://127.0.0.1:5001> (`templates/index.html`,
 exercise. The page only calls the API: filters are sent as query parameters, and API
 error messages (for example 409 when deleting a checked-out item) appear in the error
 area at the top.
-
-Prompts and corrections: [`section2/PROMPTS.md`](section2/PROMPTS.md).
