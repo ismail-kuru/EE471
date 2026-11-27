@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Art Chat</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <main class="app">
+    <!-- Title and icon -->
+    <header class="header">
+      <h1>AI Art Chat</h1>
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2c.6 4.6 2.4 6.9 7 8-4.6 1.1-6.4 3.4-7 8-.6-4.6-2.4-6.9-7-8 4.6-1.1 6.4-3.4 7-8z"/></svg>
+      </div>
+    </header>
+
+    <!-- Image output box with the paint button -->
+    <section class="image-box" id="image-box">
+      <p class="placeholder" id="image-placeholder">Your image will appear here</p>
+      <img id="image" alt="Generated image" hidden>
+      <div class="spinner" id="image-spinner" hidden></div>
+      <button class="round accent paint" id="paint" title="Paint the prompt">
+        <svg viewBox="0 0 24 24"><path d="M18.4 2.6a2 2 0 0 1 2.9 2.9L13 13.8l-2.8-2.8z"/><path d="M9.3 12.1 12 14.8c-.4 2.6-2.4 4.7-5.2 5-1.2.1-2.4-.2-3.3-.9 1.3-.4 1.9-1.4 2-2.6.2-2.2 1.6-3.8 3.8-4.2z"/></svg>
+      </button>
+    </section>
+
+    <!-- Prompt input box -->
+    <input class="field prompt" id="prompt" placeholder="Describe the image you want..." autocomplete="off">
+
+    <!-- Chat history -->
+    <section class="chat" id="chat" aria-live="polite"></section>
+
+    <!-- Mic button, message box, send button -->
+    <footer class="composer">
+      <button class="round accent" id="mic" title="Speak">
+        <svg viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>
+      </button>
+      <input class="field message" id="message" placeholder="Type or speak..." autocomplete="off">
+      <button class="round accent" id="send" title="Send">
+        <svg viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>
+      </button>
+    </footer>
+  </main>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
